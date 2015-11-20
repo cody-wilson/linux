@@ -16,11 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/host1x.h>
-#include <linux/slab.h>
-
-#include <trace/events/host1x.h>
-
 #include "../channel.h"
 #include "../dev.h"
 #include "../intr.h"

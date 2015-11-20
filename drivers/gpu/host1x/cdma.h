@@ -18,10 +18,7 @@
 
 #ifndef __HOST1X_CDMA_H
 #define __HOST1X_CDMA_H
-
-#include <linux/sched.h>
-#include <linux/semaphore.h>
-#include <linux/list.h>
+#include "verify_helpers_empty.h"
 
 struct host1x_syncpt;
 struct host1x_userctx_timeout;

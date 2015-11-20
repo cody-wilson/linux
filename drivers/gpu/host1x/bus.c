@@ -15,10 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/host1x.h>
-#include <linux/of.h>
-#include <linux/slab.h>
-
 #include "bus.h"
 #include "dev.h"
 
@@ -78,12 +74,12 @@ static int host1x_device_parse_dt(struct host1x_device *device,
 	struct device_node *np;
 	int err;
 
-	for_each_child_of_node(device->dev.parent->of_node, np) {
-		if (of_match_node(driver->subdevs, np) &&
-		    of_device_is_available(np)) {
-			err = host1x_subdev_add(device, np);
-			if (err < 0)
-				return err;
+    for (int i = 0; i < nondet_int(); i++) {
+      if (nondet_int()/* of_match_node(driver->subdevs, np) && */
+		    /* of_device_is_available(np) */) {
+        err = nondet_int();/* host1x_subdev_add(device, np); */
+        if (err < 0)
+          return err;
 		}
 	}
 

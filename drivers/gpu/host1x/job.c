@@ -16,16 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/dma-mapping.h>
-#include <linux/err.h>
-#include <linux/host1x.h>
-#include <linux/kref.h>
-#include <linux/module.h>
-#include <linux/scatterlist.h>
-#include <linux/slab.h>
-#include <linux/vmalloc.h>
-#include <trace/events/host1x.h>
-
 #include "channel.h"
 #include "dev.h"
 #include "job.h"

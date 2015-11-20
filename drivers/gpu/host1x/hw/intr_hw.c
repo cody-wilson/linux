@@ -17,10 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/interrupt.h>
-#include <linux/irq.h>
-#include <linux/io.h>
-
 #include "../intr.h"
 #include "../dev.h"
 

@@ -18,8 +18,6 @@
 #ifndef __HOST1X_DEBUG_H
 #define __HOST1X_DEBUG_H
 
-#include <linux/debugfs.h>
-#include <linux/seq_file.h>
 
 struct host1x;
 
@@ -39,7 +37,7 @@ static inline void write_to_printk(void *ctx, const char *str, size_t len)
 	pr_info("%s", str);
 }
 
-void __printf(2, 3) host1x_debug_output(struct output *o, const char *fmt, ...);
+void host1x_debug_output(struct output *o, const char *fmt, ...);
 
 extern unsigned int host1x_debug_trace_cmdbuf;
 

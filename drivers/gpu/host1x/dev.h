@@ -17,9 +17,6 @@
 #ifndef HOST1X_DEV_H
 #define HOST1X_DEV_H
 
-#include <linux/platform_device.h>
-#include <linux/device.h>
-
 #include "channel.h"
 #include "syncpt.h"
 #include "intr.h"
@@ -101,7 +98,7 @@ struct host1x_info {
 struct host1x {
 	const struct host1x_info *info;
 
-	void __iomem *regs;
+	void *regs;
 	struct host1x_syncpt *syncpt;
 	struct host1x_syncpt_base *bases;
 	struct device *dev;

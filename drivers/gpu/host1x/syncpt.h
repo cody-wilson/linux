@@ -19,11 +19,6 @@
 #ifndef __HOST1X_SYNCPT_H
 #define __HOST1X_SYNCPT_H
 
-#include <linux/atomic.h>
-#include <linux/host1x.h>
-#include <linux/kernel.h>
-#include <linux/sched.h>
-
 #include "intr.h"
 
 struct host1x;

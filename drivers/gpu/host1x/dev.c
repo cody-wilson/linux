@@ -16,16 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/module.h>
-#include <linux/list.h>
-#include <linux/slab.h>
-#include <linux/of.h>
-#include <linux/of_device.h>
-#include <linux/clk.h>
-#include <linux/io.h>
-
-#define CREATE_TRACE_POINTS
-#include <trace/events/host1x.h>
 
 #include "bus.h"
 #include "dev.h"
@@ -38,26 +28,26 @@
 
 void host1x_sync_writel(struct host1x *host1x, u32 v, u32 r)
 {
-	void __iomem *sync_regs = host1x->regs + host1x->info->sync_offset;
+	/* void *sync_regs = host1x->regs + host1x->info->sync_offset; */
 
-	writel(v, sync_regs + r);
+	/* writel(v, sync_regs + r); */
 }
 
 u32 host1x_sync_readl(struct host1x *host1x, u32 r)
 {
-	void __iomem *sync_regs = host1x->regs + host1x->info->sync_offset;
+	/* void *sync_regs = host1x->regs + host1x->info->sync_offset; */
 
-	return readl(sync_regs + r);
+	/* return readl(sync_regs + r); */
 }
 
 void host1x_ch_writel(struct host1x_channel *ch, u32 v, u32 r)
 {
-	writel(v, ch->regs + r);
+	/* writel(v, ch->regs + r); */
 }
 
 u32 host1x_ch_readl(struct host1x_channel *ch, u32 r)
 {
-	return readl(ch->regs + r);
+	/* return readl(ch->regs + r); */
 }
 
 static const struct host1x_info host1x01_info = {
@@ -94,9 +84,9 @@ static struct of_device_id host1x_of_match[] = {
 	{ .compatible = "nvidia,tegra20-host1x", .data = &host1x01_info, },
 	{ },
 };
-MODULE_DEVICE_TABLE(of, host1x_of_match);
+//MODULE_DEVICE_TABLE(of, host1x_of_match);
 
-static int host1x_probe(struct platform_device *pdev)
+int host1x_probe(struct platform_device *pdev)
 {
 	const struct of_device_id *id;
 	struct host1x *host;
@@ -104,49 +94,49 @@ static int host1x_probe(struct platform_device *pdev)
 	int syncpt_irq;
 	int err;
 
-	id = of_match_device(host1x_of_match, &pdev->dev);
+	id = nondet_int(); /* of_match_device(host1x_of_match, &pdev->dev); */
 	if (!id)
-		return -EINVAL;
+      return -nondet_int();
 
-	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	regs = nondet_int();/* platform_get_resource(pdev, IORESOURCE_MEM, 0); */
 	if (!regs) {
-		dev_err(&pdev->dev, "failed to get registers\n");
+		/* dev_err(&pdev->dev, "failed to get registers\n"); */
 		return -ENXIO;
 	}
 
-	syncpt_irq = platform_get_irq(pdev, 0);
+	syncpt_irq = nondet_int(); /* platform_get_irq(pdev, 0); */
 	if (syncpt_irq < 0) {
-		dev_err(&pdev->dev, "failed to get IRQ\n");
+		/* dev_err(&pdev->dev, "failed to get IRQ\n"); */
 		return -ENXIO;
 	}
 
-	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+	host = nondet_int(); /* devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL); */
 	if (!host)
-		return -ENOMEM;
+      return -nondet_int();
 
 	mutex_init(&host->devices_lock);
-	INIT_LIST_HEAD(&host->devices);
-	INIT_LIST_HEAD(&host->list);
-	host->dev = &pdev->dev;
-	host->info = id->data;
+	/* INIT_LIST_HEAD(&host->devices); */
+	/* INIT_LIST_HEAD(&host->list); */
+	/* host->dev = &pdev->dev; */
+	/* host->info = id->data; */
 
 	/* set common host1x device data */
-	platform_set_drvdata(pdev, host);
+	/* platform_set_drvdata(pdev, host); */
 
-	host->regs = devm_ioremap_resource(&pdev->dev, regs);
-	if (IS_ERR(host->regs))
-		return PTR_ERR(host->regs);
+	host->regs = nondet_int(); /* devm_ioremap_resource(&pdev->dev, regs); */
+	if (nondet_int()/* IS_ERR(host->regs) */)
+      return nondet_int();/* PTR_ERR(host->regs); */
 
-	if (host->info->init) {
-		err = host->info->init(host);
+	if (nondet_int()/* host->info->init */) {
+      err = nondet_int();/* host->info->init(host); */
 		if (err)
 			return err;
 	}
 
-	host->clk = devm_clk_get(&pdev->dev, NULL);
-	if (IS_ERR(host->clk)) {
+	host->clk = (void *) nondet_int(); /* devm_clk_get(&pdev->dev, 0); */
+	if (IS_ERR) {
 		dev_err(&pdev->dev, "failed to get clock\n");
-		err = PTR_ERR(host->clk);
+		err = PTR_ERR;
 		return err;
 	}
 
@@ -156,7 +146,7 @@ static int host1x_probe(struct platform_device *pdev)
 		return err;
 	}
 
-	err = clk_prepare_enable(host->clk);
+	err = nondet_int(); /* clk_prepare_enable(host->clk); */
 	if (err < 0) {
 		dev_err(&pdev->dev, "failed to enable clock\n");
 		return err;
@@ -187,66 +177,66 @@ fail_deinit_intr:
 fail_deinit_syncpt:
 	host1x_syncpt_deinit(host);
 fail_unprepare_disable:
-	clk_disable_unprepare(host->clk);
+	/* clk_disable_unprepare(host->clk); */
 	return err;
 }
 
 static int host1x_remove(struct platform_device *pdev)
 {
-	struct host1x *host = platform_get_drvdata(pdev);
+  struct host1x *host = nondet_int();/* platform_get_drvdata(pdev); */
 
 	host1x_unregister(host);
 	host1x_intr_deinit(host);
 	host1x_syncpt_deinit(host);
-	clk_disable_unprepare(host->clk);
+	/* clk_disable_unprepare(host->clk); */
 
 	return 0;
 }
 
-static struct platform_driver tegra_host1x_driver = {
-	.driver = {
-		.name = "tegra-host1x",
-		.of_match_table = host1x_of_match,
-	},
-	.probe = host1x_probe,
-	.remove = host1x_remove,
-};
+static struct platform_driver tegra_host1x_driver;/*  = { */
+/* 	/\* .driver = { *\/ */
+/* 	/\* 	.name = "tegra-host1x", *\/ */
+/* 	/\* 	.of_match_table = host1x_of_match, *\/ */
+/* 	/\* }, *\/ */
+/* 	/\* .probe = host1x_probe, *\/ */
+/* 	/\* .remove = host1x_remove, *\/ */
+/* }; */
 
-static int __init tegra_host1x_init(void)
+static int tegra_host1x_init(void)
 {
 	int err;
 
-	err = bus_register(&host1x_bus_type);
+	err = nondet_int();/* bus_register(&host1x_bus_type); */
 	if (err < 0)
 		return err;
 
-	err = platform_driver_register(&tegra_host1x_driver);
+	err = nondet_int(); /* platform_driver_register(&tegra_host1x_driver); */
 	if (err < 0)
 		goto unregister_bus;
 
-	err = platform_driver_register(&tegra_mipi_driver);
+	err = nondet_int();/* platform_driver_register(&tegra_mipi_driver); */
 	if (err < 0)
 		goto unregister_host1x;
 
 	return 0;
 
 unregister_host1x:
-	platform_driver_unregister(&tegra_host1x_driver);
+	/* platform_driver_unregister(&tegra_host1x_driver); */
 unregister_bus:
-	bus_unregister(&host1x_bus_type);
+	/* bus_unregister(&host1x_bus_type); */
 	return err;
 }
-module_init(tegra_host1x_init);
+//module_init(tegra_host1x_init);
 
-static void __exit tegra_host1x_exit(void)
+static void tegra_host1x_exit(void)
 {
-	platform_driver_unregister(&tegra_mipi_driver);
-	platform_driver_unregister(&tegra_host1x_driver);
-	bus_unregister(&host1x_bus_type);
+	/* platform_driver_unregister(&tegra_mipi_driver); */
+	/* platform_driver_unregister(&tegra_host1x_driver); */
+	/* bus_unregister(&host1x_bus_type); */
 }
-module_exit(tegra_host1x_exit);
+/* module_exit(tegra_host1x_exit); */
 
-MODULE_AUTHOR("Thierry Reding <thierry.reding@avionic-design.de>");
-MODULE_AUTHOR("Terje Bergstrom <tbergstrom@nvidia.com>");
-MODULE_DESCRIPTION("Host1x driver for Tegra products");
-MODULE_LICENSE("GPL");
+/* MODULE_AUTHOR("Thierry Reding <thierry.reding@avionic-design.de>"); */
+/* MODULE_AUTHOR("Terje Bergstrom <tbergstrom@nvidia.com>"); */
+/* MODULE_DESCRIPTION("Host1x driver for Tegra products"); */
+/* MODULE_LICENSE("GPL"); */

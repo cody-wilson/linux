@@ -16,12 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/module.h>
-#include <linux/device.h>
-#include <linux/slab.h>
-
-#include <trace/events/host1x.h>
-
 #include "syncpt.h"
 #include "dev.h"
 #include "intr.h"

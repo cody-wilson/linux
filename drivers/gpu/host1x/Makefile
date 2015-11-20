@@ -13,3 +13,6 @@ host1x-y = \
 	hw/host1x04.o
 
 obj-$(CONFIG_TEGRA_HOST1X) += host1x.o
+
+verify%:
+	cbmc $(@:verify%=%) 

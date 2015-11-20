@@ -16,17 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <asm/cacheflush.h>
-#include <linux/device.h>
-#include <linux/dma-mapping.h>
-#include <linux/host1x.h>
-#include <linux/interrupt.h>
-#include <linux/kernel.h>
-#include <linux/kfifo.h>
-#include <linux/slab.h>
-#include <trace/events/host1x.h>
-
 #include "cdma.h"
 #include "channel.h"
 #include "dev.h"

@@ -19,9 +19,6 @@
 #ifndef __HOST1X_INTR_H
 #define __HOST1X_INTR_H
 
-#include <linux/interrupt.h>
-#include <linux/workqueue.h>
-
 struct host1x;
 
 enum host1x_intr_action {

@@ -19,8 +19,6 @@
 #ifndef __HOST1X_CHANNEL_H
 #define __HOST1X_CHANNEL_H
 
-#include <linux/io.h>
-
 #include "cdma.h"
 
 struct host1x;
@@ -32,7 +30,7 @@ struct host1x_channel {
 	unsigned int id;
 	struct mutex reflock;
 	struct mutex submitlock;
-	void __iomem *regs;
+	void  *regs;
 	struct device *dev;
 	struct host1x_cdma cdma;
 };

@@ -16,9 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/slab.h>
-#include <linux/module.h>
-
 #include "channel.h"
 #include "dev.h"
 #include "job.h"

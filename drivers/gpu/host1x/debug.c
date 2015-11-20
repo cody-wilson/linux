@@ -15,12 +15,6 @@
  *
  */
 
-#include <linux/debugfs.h>
-#include <linux/seq_file.h>
-#include <linux/uaccess.h>
-
-#include <linux/io.h>
-
 #include "dev.h"
 #include "debug.h"
 #include "channel.h"
