@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "verification_helpers.h"
 #include "cdma.h"
 #include "channel.h"
 #include "dev.h"
 #include "debug.h"
 #include "job.h"
+#include "host1x.h"
+
 
 /*
  * push_buffer
@@ -176,8 +179,8 @@ static void cdma_start_timer_locked(struct host1x_cdma *cdma,
 	cdma->timeout.syncpt_val = job->syncpt_end;
 	cdma->timeout.start_ktime = ktime_get();
 
-	schedule_delayed_work(&cdma->timeout.wq,
-			      msecs_to_jiffies(job->timeout));
+	/* schedule_delayed_work(&cdma->timeout.wq, */
+	/* 		      msecs_to_jiffies(job->timeout)); */
 }
 
 /*
@@ -186,8 +189,8 @@ static void cdma_start_timer_locked(struct host1x_cdma *cdma,
  */
 static void stop_cdma_timer_locked(struct host1x_cdma *cdma)
 {
-	cancel_delayed_work(&cdma->timeout.wq);
-	cdma->timeout.client = 0;
+  cancel_delayed_work(&cdma->timeout.wq);
+  cdma->timeout.client = 0;
 }
 
 /*

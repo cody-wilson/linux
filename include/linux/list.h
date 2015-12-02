@@ -348,8 +348,7 @@ static inline void list_splice_tail_init(struct list_head *list,
  * @type:	the type of the struct this is embedded in.
  * @member:	the name of the list_head within the struct.
  */
-#define list_entry(ptr, type, member) \
-	container_of(ptr, type, member)
+
 
 /**
  * list_first_entry - get the first element from a list

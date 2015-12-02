@@ -18,7 +18,7 @@
 
 #ifndef __HOST1X_CHANNEL_H
 #define __HOST1X_CHANNEL_H
-
+#include "verify_helpers_empty.h"
 #include "cdma.h"
 
 struct host1x;

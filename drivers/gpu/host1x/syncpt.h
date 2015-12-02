@@ -19,6 +19,7 @@
 #ifndef __HOST1X_SYNCPT_H
 #define __HOST1X_SYNCPT_H
 
+#include "verification_helpers.h"
 #include "intr.h"
 
 struct host1x;

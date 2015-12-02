@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "verify_helpers_empty.h"
 
 #ifndef __HOST1X_CDMA_H
 #define __HOST1X_CDMA_H
-#include "verify_helpers_empty.h"
-
 struct host1x_syncpt;
 struct host1x_userctx_timeout;
 struct host1x_job;
@@ -47,7 +46,7 @@ struct push_buffer {
 };
 
 struct buffer_timeout {
-	struct delayed_work wq;		/* work queue */
+  struct delayed_work wq;		/* work queue */
 	bool initialized;		/* timer one-time setup flag */
 	struct host1x_syncpt *syncpt;	/* buffer completion syncpt */
 	u32 syncpt_val;			/* syncpt value when completed */

@@ -108,8 +108,8 @@ static void action_submit_complete(struct host1x_waitlist *waiter)
 	host1x_cdma_update(&channel->cdma);
 
 	/*  Add nr_completed to trace */
-	trace_host1x_channel_submit_complete(dev_name(channel->dev),
-					     waiter->count, waiter->thresh);
+	/* trace_host1x_channel_submit_complete(dev_name(channel->dev), */
+	/* 				     waiter->count, waiter->thresh); */
 
 }
 
@@ -217,12 +217,14 @@ int host1x_intr_add_action(struct host1x *host, u32 id, u32 thresh,
 
 	/* initialize a new waiter */
 	INIT_LIST_HEAD(&waiter->list);
-	kref_init(&waiter->refcount);
-	if (ref)
-		kref_get(&waiter->refcount);
+	/* kref_init(&waiter->refcount); */
+	/* if (ref) */
+	/* 	kref_get(&waiter->refcount); */
 	waiter->thresh = thresh;
 	waiter->action = action;
-	atomic_set(&waiter->state, WLS_PENDING);
+
+    waiter->state = WLS_PENDING;
+	/* atomic_set(&waiter->state, WLS_PENDING); */
 	waiter->data = data;
 	waiter->count = 1;
 

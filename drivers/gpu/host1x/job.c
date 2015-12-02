@@ -65,14 +65,12 @@ struct host1x_job *host1x_job_alloc(struct host1x_channel *ch,
 
 	return job;
 }
-EXPORT_SYMBOL(host1x_job_alloc);
 
 struct host1x_job *host1x_job_get(struct host1x_job *job)
 {
 	kref_get(&job->ref);
 	return job;
 }
-EXPORT_SYMBOL(host1x_job_get);
 
 static void job_free(struct kref *ref)
 {
@@ -85,7 +83,6 @@ void host1x_job_put(struct host1x_job *job)
 {
 	kref_put(&job->ref, job_free);
 }
-EXPORT_SYMBOL(host1x_job_put);
 
 void host1x_job_add_gather(struct host1x_job *job, struct host1x_bo *bo,
 			   u32 words, u32 offset)
@@ -97,7 +94,6 @@ void host1x_job_add_gather(struct host1x_job *job, struct host1x_bo *bo,
 	cur_gather->offset = offset;
 	job->num_gathers++;
 }
-EXPORT_SYMBOL(host1x_job_add_gather);
 
 /*
  * NULL an already satisfied WAIT_SYNCPT host method, by patching its
@@ -554,7 +550,6 @@ out:
 
 	return err;
 }
-EXPORT_SYMBOL(host1x_job_pin);
 
 void host1x_job_unpin(struct host1x_job *job)
 {
@@ -572,7 +567,6 @@ void host1x_job_unpin(struct host1x_job *job)
 				      job->gather_copy_mapped,
 				      job->gather_copy);
 }
-EXPORT_SYMBOL(host1x_job_unpin);
 
 /*
  * Debug routine used to dump job entries

@@ -19,6 +19,8 @@
 #ifndef __HOST1X_JOB_H
 #define __HOST1X_JOB_H
 
+#include "host1x.h"
+
 struct host1x_job_gather {
 	u32 words;
 	dma_addr_t base;
