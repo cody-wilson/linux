@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "verification_helpers.h"
+#include "verify_helpers_empty.h"
 #include "cdma.h"
 #include "channel.h"
 #include "dev.h"

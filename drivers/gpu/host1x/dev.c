@@ -115,10 +115,10 @@ int host1x_probe(struct platform_device *pdev)
       return -nondet_int();
 
 	mutex_init(&host->devices_lock);
-	/* INIT_LIST_HEAD(&host->devices); */
-	/* INIT_LIST_HEAD(&host->list); */
-	/* host->dev = &pdev->dev; */
-	/* host->info = id->data; */
+	INIT_LIST_HEAD(&host->devices);
+	INIT_LIST_HEAD(&host->list);
+	host->dev = &pdev->dev;
+	host->info = id->data;
 
 	/* set common host1x device data */
 	/* platform_set_drvdata(pdev, host); */

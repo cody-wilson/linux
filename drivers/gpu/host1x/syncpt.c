@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "verify_helpers_empty.h"
 #include "syncpt.h"
 #include "dev.h"
 #include "intr.h"
@@ -87,16 +87,15 @@ u32 host1x_syncpt_id(struct host1x_syncpt *sp)
 {
 	return sp->id;
 }
-EXPORT_SYMBOL(host1x_syncpt_id);
 
 /*
  * Updates the value sent to hardware.
  */
 u32 host1x_syncpt_incr_max(struct host1x_syncpt *sp, u32 incrs)
 {
-	return (u32)atomic_add_return(incrs, &sp->max_val);
+  sp->max_val += incrs;
+  return (u32)sp->max_val;
 }
-EXPORT_SYMBOL(host1x_syncpt_incr_max);
 
  /*
  * Write cached syncpoint and waitbase values to hardware.
@@ -141,7 +140,6 @@ u32 host1x_syncpt_load(struct host1x_syncpt *sp)
 {
 	u32 val;
 	val = host1x_hw_syncpt_load(sp->host, sp);
-	trace_host1x_syncpt_load_min(sp->id, val);
 
 	return val;
 }
@@ -164,7 +162,6 @@ int host1x_syncpt_incr(struct host1x_syncpt *sp)
 {
 	return host1x_hw_syncpt_cpu_incr(sp->host, sp);
 }
-EXPORT_SYMBOL(host1x_syncpt_incr);
 
 /*
  * Updated sync point form hardware, and returns true if syncpoint is expired,
@@ -248,14 +245,14 @@ int host1x_syncpt_wait(struct host1x_syncpt *sp, u32 thresh, long timeout,
 		}
 		timeout -= check;
 		if (timeout && check_count <= MAX_STUCK_CHECK_COUNT) {
-			dev_warn(sp->host->dev,
-				"%s: syncpoint id %d (%s) stuck waiting %d, timeout=%ld\n",
-				 current->comm, sp->id, sp->name,
-				 thresh, timeout);
-
-			host1x_debug_dump_syncpts(sp->host);
-			if (check_count == MAX_STUCK_CHECK_COUNT)
-				host1x_debug_dump(sp->host);
+			/* dev_warn(sp->host->dev, */
+			/* 	"%s: syncpoint id %d (%s) stuck waiting %d, timeout=%ld\n", */
+			/* 	 current->comm, sp->id, sp->name, */
+			/* 	 thresh, timeout); */
+          
+			/* host1x_debug_dump_syncpts(sp->host); */
+			/* if (check_count == MAX_STUCK_CHECK_COUNT) */
+			/* 	host1x_debug_dump(sp->host); */
 			check_count++;
 		}
 	}
@@ -264,7 +261,6 @@ int host1x_syncpt_wait(struct host1x_syncpt *sp, u32 thresh, long timeout,
 done:
 	return err;
 }
-EXPORT_SYMBOL(host1x_syncpt_wait);
 
 /*
  * Returns true if syncpoint is expired, false if we may need to wait
@@ -374,7 +370,6 @@ struct host1x_syncpt *host1x_syncpt_request(struct device *dev,
 	struct host1x *host = dev_get_drvdata(dev->parent);
 	return host1x_syncpt_alloc(host, dev, flags);
 }
-EXPORT_SYMBOL(host1x_syncpt_request);
 
 void host1x_syncpt_free(struct host1x_syncpt *sp)
 {
@@ -388,7 +383,6 @@ void host1x_syncpt_free(struct host1x_syncpt *sp)
 	sp->name = NULL;
 	sp->client_managed = false;
 }
-EXPORT_SYMBOL(host1x_syncpt_free);
 
 void host1x_syncpt_deinit(struct host1x *host)
 {
@@ -407,7 +401,6 @@ u32 host1x_syncpt_read_max(struct host1x_syncpt *sp)
 	smp_rmb();
 	return (u32)atomic_read(&sp->max_val);
 }
-EXPORT_SYMBOL(host1x_syncpt_read_max);
 
 /*
  * Read min, which is a shadow of the current sync point value in hardware.
@@ -417,13 +410,11 @@ u32 host1x_syncpt_read_min(struct host1x_syncpt *sp)
 	smp_rmb();
 	return (u32)atomic_read(&sp->min_val);
 }
-EXPORT_SYMBOL(host1x_syncpt_read_min);
 
 u32 host1x_syncpt_read(struct host1x_syncpt *sp)
 {
 	return host1x_syncpt_load(sp);
 }
-EXPORT_SYMBOL(host1x_syncpt_read);
 
 int host1x_syncpt_nb_pts(struct host1x *host)
 {
@@ -446,16 +437,13 @@ struct host1x_syncpt *host1x_syncpt_get(struct host1x *host, u32 id)
 		return NULL;
 	return host->syncpt + id;
 }
-EXPORT_SYMBOL(host1x_syncpt_get);
 
 struct host1x_syncpt_base *host1x_syncpt_get_base(struct host1x_syncpt *sp)
 {
 	return sp ? sp->base : NULL;
 }
-EXPORT_SYMBOL(host1x_syncpt_get_base);
 
 u32 host1x_syncpt_base_id(struct host1x_syncpt_base *base)
 {
 	return base->id;
 }
-EXPORT_SYMBOL(host1x_syncpt_base_id);

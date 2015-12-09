@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "verify_helpers_empty.h"
 #include "channel.h"
 #include "dev.h"
 #include "job.h"
@@ -45,7 +45,7 @@ struct host1x_job *host1x_job_alloc(struct host1x_channel *ch,
 	if (!job)
 		return NULL;
 
-	kref_init(&job->ref);
+	/* kref_init(&job->ref); */
 	job->channel = ch;
 
 	/* Redistribute memory to the structs  */
@@ -68,20 +68,20 @@ struct host1x_job *host1x_job_alloc(struct host1x_channel *ch,
 
 struct host1x_job *host1x_job_get(struct host1x_job *job)
 {
-	kref_get(&job->ref);
+	/* kref_get(&job->ref); */
 	return job;
 }
 
 static void job_free(struct kref *ref)
 {
-	struct host1x_job *job = container_of(ref, struct host1x_job, ref);
+	/* struct host1x_job *job = container_of(ref, struct host1x_job, ref); */
 
-	kfree(job);
+	/* kfree(job); */
 }
 
 void host1x_job_put(struct host1x_job *job)
 {
-	kref_put(&job->ref, job_free);
+	/* kref_put(&job->ref, job_free); */
 }
 
 void host1x_job_add_gather(struct host1x_job *job, struct host1x_bo *bo,
@@ -114,7 +114,8 @@ static void host1x_syncpt_patch_offset(struct host1x_syncpt *sp,
 					 patch_addr + (offset & ~PAGE_MASK));
 		host1x_bo_kunmap(h, offset >> PAGE_SHIFT, patch_addr);
 	} else
-		pr_err("Could not map cmdbuf for wait check\n");
+		/* pr_err("Could not map cmdbuf for wait check\n"); */
+      return;
 }
 
 /*
@@ -141,9 +142,9 @@ static int do_waitchks(struct host1x_job *job, struct host1x *host,
 		if (patch != wait->bo)
 			continue;
 
-		trace_host1x_syncpt_wait_check(wait->bo, wait->offset,
-					       wait->syncpt_id, wait->thresh,
-					       host1x_syncpt_read_min(sp));
+		/* trace_host1x_syncpt_wait_check(wait->bo, wait->offset, */
+		/* 			       wait->syncpt_id, wait->thresh, */
+		/* 			       host1x_syncpt_read_min(sp)); */
 
 		if (host1x_syncpt_is_expired(sp, wait->thresh)) {
 			dev_dbg(host->dev,
@@ -237,8 +238,8 @@ static unsigned int do_relocs(struct host1x_job *job, struct host1x_bo *cmdbuf)
 					reloc->cmdbuf.offset >> PAGE_SHIFT);
 			last_page = reloc->cmdbuf.offset >> PAGE_SHIFT;
 
-			if (unlikely(!cmdbuf_page_addr)) {
-				pr_err("Could not map cmdbuf for relocation\n");
+			if (nondet_int()/* unlikely(!cmdbuf_page_addr) */) {
+				/* pr_err("Could not map cmdbuf for relocation\n"); */
 				return -ENOMEM;
 			}
 		}

@@ -41,6 +41,35 @@ typedef int s32;
 
 #define NULL 0
 
+#define ULONG_MAX nondet_int()
+
+#define PAGE_SHIFT nondet_int()
+
+#define PAGE_MASK nondet_int()
+
+struct kref {
+	atomic_t refcount;
+};
+
+
+struct device_node {
+	const char *name;
+	const char *type;
+	/* phandle phandle; */
+	const char *full_name;
+	/* struct fwnode_handle fwnode; */
+
+	/* struct	property *properties; */
+	/* struct	property *deadprops;	/\* removed properties *\/ */
+	struct	device_node *parent;
+	struct	device_node *child;
+	struct	device_node *sibling;
+	struct	kobject kobj;
+	unsigned long _flags;
+	void	*data;
+};
+
+
 void smp_rmb();
 
 u32 host1x_syncpt_read_max(void *sp);
@@ -471,5 +500,119 @@ struct sg_table {
 	unsigned int nents;		/* number of mapped entries */
 	unsigned int orig_nents;	/* original size of list */
 };
+#define MAX_PHANDLE_ARGS nondet_int()
 
+
+
+struct of_phandle_args {
+	struct device_node *np;
+	int args_count;
+	u32 args[MAX_PHANDLE_ARGS];
+};
+
+#define ERR_PTR nondet_int
+
+#define ENODEV nondet_int()
+
+#define EPROBE_DEFER nondet_int()
+
+void platform_device_put(void *p);
+
+#define time_after(a,b)		\
+  ((long)((b) - (a)) < 0)
+#define time_before(a,b)	time_after(b,a)
+
+void usleep_range(unsigned long min, unsigned long max);
+
+#define ETIMEDOUT nondet_int();
+
+int clk_enable(void *clk) {
+  return nondet_int();
+}
+
+int clk_disable(void *clk) {
+  return nondet_int();
+}
+
+#define ARRAY_SIZE(x) nondet_int()
+
+extern const struct of_device_id *of_match_node(
+	const struct of_device_id *matches, const struct device_node *node);
+
+#define IORESOURCE_MEM nondet_int()
+
+static inline void *platform_get_drvdata(const struct platform_device *pdev);
+
+int clk_prepare(void *clk);
+
+static inline void platform_set_drvdata(struct platform_device *pdev,
+                                        void *data);
+
+void clk_unprepare(void *clk);
+
+char * kasprintf(void *str, ...);
+
+void memcpy(void *dest, const void *src, size_t n) {
+  char *destc = (char *)dest;
+  const char *srcc = (const char *)src;
+
+  for (int i = 0; i < n; i++) {
+    destc[i] = srcc[i];
+  }
+}
+
+#define BITS_TO_LONGS(bits) DIV_ROUND_UP(bits, 8*8)
+
+#define DECLARE_BITMAP(name, bits) \
+  unsigned long name[BITS_TO_LONGS(bits)]
+
+static inline void memset(void *s, int c, size_t n) {
+  char *sc = (char *)s;
+  
+  for (int i = 0; i < n; i++) {
+    sc[i] = c;
+  }
+}
+
+static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
+{
+	if (nbits < 8*8)
+		*dst = 0UL;
+	else {
+		unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
+		memset(dst, 0, len);
+	}
+}
+
+void set_bit(unsigned long nr, volatile unsigned long *addr);
+
+#define CONFIG_TEGRA_HOST1X_FIREWALL nondet_int()
+
+#define wmb()   asm volatile("sfence" : : : "memory")
+
+#define HZ 1000
+
+
+#define __WAIT_QUEUE_HEAD_INITIALIZER(name) {				\
+	.lock		= name.lock,		\
+	.task_list	= { &(name).task_list, &(name).task_list } }
+
+#define DECLARE_WAIT_QUEUE_HEAD(name) \
+  wait_queue_head_t name = __WAIT_QUEUE_HEAD_INITIALIZER(name); \
+  mutex_init(&name.lock);
+# define DECLARE_WAIT_QUEUE_HEAD_ONSTACK(name) DECLARE_WAIT_QUEUE_HEAD(name)
+
+#define wait_event_interruptible_timeout(wq, condition, timeout)	nondet_int()
+
+#define EAGAIN nondet_int()
+
+#define LONG_MAX nondet_int()
+
+typedef unsigned long atomic_long_t;
+typedef void (*work_func_t)(struct work_struct *work);
+struct work_struct {
+	atomic_long_t data;
+	struct list_head entry;
+	work_func_t func;
+};
 #endif

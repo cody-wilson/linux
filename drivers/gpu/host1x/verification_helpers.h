@@ -20,12 +20,12 @@ void mutex_init(struct mutex *mutex) {
 }
 
 void mutex_lock(struct mutex *mutex) {
-  assert(!mutex->locked);
+  assert(mutex->locked == false);
   mutex->locked = true;
 }
 
 void mutex_unlock(struct mutex *mutex) {
-  assert(mutex->locked);
+  assert(mutex->locked == true);
   mutex->locked = false;
 }
 

@@ -96,4 +96,5 @@ void host1x_intr_start(struct host1x *host);
 void host1x_intr_stop(struct host1x *host);
 
 irqreturn_t host1x_syncpt_thresh_fn(void *dev_id);
+
 #endif

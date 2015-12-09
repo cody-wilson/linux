@@ -184,7 +184,7 @@ struct host1x_job {
 	struct list_head list;
 
 	/* Channel where job is submitted to */
-	/* struct host1x_channel *channel; */
+	struct host1x_channel *channel;
 
 	u32 client;
 

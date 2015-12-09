@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "verify_helpers_empty.h"
-
+#include "verification_helpers.h"
 #ifndef __HOST1X_CDMA_H
 #define __HOST1X_CDMA_H
 struct host1x_syncpt;
@@ -46,7 +46,7 @@ struct push_buffer {
 };
 
 struct buffer_timeout {
-  struct delayed_work wq;		/* work queue */
+  /* struct delayed_work */void *wq;		/* work queue */
 	bool initialized;		/* timer one-time setup flag */
 	struct host1x_syncpt *syncpt;	/* buffer completion syncpt */
 	u32 syncpt_val;			/* syncpt value when completed */
@@ -93,4 +93,5 @@ unsigned int host1x_cdma_wait_locked(struct host1x_cdma *cdma,
 				     enum cdma_event event);
 void host1x_cdma_update_sync_queue(struct host1x_cdma *cdma,
 				   struct device *dev);
+
 #endif

@@ -111,7 +111,7 @@ struct tegra_mipi_soc {
 struct tegra_mipi {
 	const struct tegra_mipi_soc *soc;
 	struct device *dev;
-	void __iomem *regs;
+	void  *regs;
 	struct mutex lock;
 	struct clk *clk;
 
@@ -142,7 +142,7 @@ static int tegra_mipi_power_up(struct tegra_mipi *mipi)
 	u32 value;
 	int err;
 
-	err = clk_enable(mipi->clk);
+	err = nondet_int(); /* clk_enable(mipi->clk); */
 	if (err < 0)
 		return err;
 
@@ -158,7 +158,7 @@ static int tegra_mipi_power_up(struct tegra_mipi *mipi)
 	value &= ~MIPI_CAL_BIAS_PAD_PDVREG;
 	tegra_mipi_writel(mipi, value, MIPI_CAL_BIAS_PAD_CFG2);
 
-	clk_disable(mipi->clk);
+	/* clk_disable(mipi->clk); */
 
 	return 0;
 }
@@ -168,7 +168,7 @@ static int tegra_mipi_power_down(struct tegra_mipi *mipi)
 	u32 value;
 	int err;
 
-	err = clk_enable(mipi->clk);
+	err = nondet_int(); /* clk_enable(mipi->clk); */
 	if (err < 0)
 		return err;
 
@@ -205,9 +205,9 @@ struct tegra_mipi_device *tegra_mipi_request(struct device *device)
 	struct of_phandle_args args;
 	int err;
 
-	err = of_parse_phandle_with_args(np, "nvidia,mipi-calibrate",
-					 "#nvidia,mipi-calibrate-cells", 0,
-					 &args);
+	err = nondet_int();/* of_parse_phandle_with_args(np, "nvidia,mipi-calibrate", */
+		  /*   		 "#nvidia,mipi-calibrate-cells", 0, */
+		  /*   		 &args); */
 	if (err < 0)
 		return ERR_PTR(err);
 
@@ -217,13 +217,13 @@ struct tegra_mipi_device *tegra_mipi_request(struct device *device)
 		goto out;
 	}
 
-	dev->pdev = of_find_device_by_node(args.np);
+	dev->pdev = nondet_int();/* of_find_device_by_node(args.np); */
 	if (!dev->pdev) {
 		err = -ENODEV;
 		goto free;
 	}
 
-	dev->mipi = platform_get_drvdata(dev->pdev);
+	dev->mipi = nondet_int();/* platform_get_drvdata(dev->pdev); */
 	if (!dev->mipi) {
 		err = -EPROBE_DEFER;
 		goto put;
@@ -258,7 +258,6 @@ out:
 	of_node_put(args.np);
 	return ERR_PTR(err);
 }
-EXPORT_SYMBOL(tegra_mipi_request);
 
 void tegra_mipi_free(struct tegra_mipi_device *device)
 {
@@ -284,10 +283,10 @@ void tegra_mipi_free(struct tegra_mipi_device *device)
 	platform_device_put(device->pdev);
 	kfree(device);
 }
-EXPORT_SYMBOL(tegra_mipi_free);
 
 static int tegra_mipi_wait(struct tegra_mipi *mipi)
 {
+  unsigned long jiffies = nondet_int();
 	unsigned long timeout = jiffies + msecs_to_jiffies(250);
 	u32 value;
 
@@ -374,7 +373,6 @@ int tegra_mipi_calibrate(struct tegra_mipi_device *device)
 
 	return err;
 }
-EXPORT_SYMBOL(tegra_mipi_calibrate);
 
 static const struct tegra_mipi_pad tegra114_mipi_pads[] = {
 	{ .data = MIPI_CAL_CONFIG_CSIA },
@@ -498,7 +496,7 @@ static int tegra_mipi_probe(struct platform_device *pdev)
 	if (!match)
 		return -ENODEV;
 
-	mipi = devm_kzalloc(&pdev->dev, sizeof(*mipi), GFP_KERNEL);
+	mipi = /* devm_kzalloc(&pdev->dev, sizeof(*mipi), GFP_KERNEL); */ nondet_int();
 	if (!mipi)
 		return -ENOMEM;
 
@@ -506,16 +504,16 @@ static int tegra_mipi_probe(struct platform_device *pdev)
 	mipi->dev = &pdev->dev;
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	mipi->regs = devm_ioremap_resource(&pdev->dev, res);
-	if (IS_ERR(mipi->regs))
-		return PTR_ERR(mipi->regs);
+	mipi->regs = nondet_int(); /* devm_ioremap_resource(&pdev->dev, res); */
+	if (nondet_int()/* IS_ERR(mipi->regs) */)
+      return /* PTR_ERR(mipi->regs); */ nondet_int();
 
 	mutex_init(&mipi->lock);
 
-	mipi->clk = devm_clk_get(&pdev->dev, NULL);
-	if (IS_ERR(mipi->clk)) {
+	mipi->clk = nondet_int();/* devm_clk_get(&pdev->dev, NULL); */
+	if (/* IS_ERR(mipi->clk) */nondet_int()) {
 		dev_err(&pdev->dev, "failed to get clock\n");
-		return PTR_ERR(mipi->clk);
+		return nondet_int();/* PTR_ERR(mipi->clk); */
 	}
 
 	err = clk_prepare(mipi->clk);
@@ -536,11 +534,11 @@ static int tegra_mipi_remove(struct platform_device *pdev)
 	return 0;
 }
 
-struct platform_driver tegra_mipi_driver = {
-	.driver = {
-		.name = "tegra-mipi",
-		.of_match_table = tegra_mipi_of_match,
-	},
-	.probe = tegra_mipi_probe,
-	.remove = tegra_mipi_remove,
-};
+struct platform_driver tegra_mipi_driver;/*  = { */
+/* 	.driver = { */
+/* 		.name = "tegra-mipi", */
+/* 		.of_match_table = tegra_mipi_of_match, */
+/* 	}, */
+/* 	.probe = tegra_mipi_probe, */
+/* 	.remove = tegra_mipi_remove, */
+/* }; */

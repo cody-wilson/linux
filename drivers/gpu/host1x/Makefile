@@ -14,5 +14,6 @@ host1x-y = \
 
 obj-$(CONFIG_TEGRA_HOST1X) += host1x.o
 
-verify%:
-	cbmc $(@:verify%=%) 
+verify.%:
+	cbmc bus.c cdma.c channel.c dev.c intr.c job.c mipi.c syncpt.c --function $(@:verify.%=%)
+
