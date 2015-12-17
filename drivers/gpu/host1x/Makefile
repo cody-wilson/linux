@@ -15,5 +15,4 @@ host1x-y = \
 obj-$(CONFIG_TEGRA_HOST1X) += host1x.o
 
 verify.%:
-	cbmc bus.c cdma.c channel.c dev.c intr.c job.c mipi.c syncpt.c --function $(@:verify.%=%)
-
+	cbmc $(@:verify.%=%)main.c bus.c cdma.c channel.c dev.c intr.c job.c mipi.c syncpt.c --unwind 2 --no-unwinding-assertions --slice-formula

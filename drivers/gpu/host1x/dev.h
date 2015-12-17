@@ -16,7 +16,7 @@
 
 #ifndef HOST1X_DEV_H
 #define HOST1X_DEV_H
-
+#include "verify_helpers_empty.h"
 #include "channel.h"
 #include "syncpt.h"
 #include "intr.h"

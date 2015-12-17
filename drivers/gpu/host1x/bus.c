@@ -155,10 +155,10 @@ static void __host1x_subdev_unregister(struct host1x_device *device,
 	mutex_unlock(&device->clients_lock);
 }
 
-static void host1x_subdev_unregister(struct host1x_device *device,
+void host1x_subdev_unregister(struct host1x_device *device,
 				     struct host1x_subdev *subdev)
 {
-	mutex_lock(&device->subdevs_lock);
+  	mutex_lock(&device->subdevs_lock);
 	__host1x_subdev_unregister(device, subdev);
 	mutex_unlock(&device->subdevs_lock);
 }
@@ -479,9 +479,9 @@ int host1x_register(struct host1x *host1x)
 {
 	struct host1x_driver *driver;
 
-	mutex_lock(&devices_lock);
-	list_add_tail(&host1x->list, &devices);
-	mutex_unlock(&devices_lock);
+	mutex_lock(&host1x->devices_lock);
+	list_add_tail(&host1x->list, &host1x->devices);
+	mutex_unlock(&host1x->devices_lock);
 
 	mutex_lock(&drivers_lock);
 
