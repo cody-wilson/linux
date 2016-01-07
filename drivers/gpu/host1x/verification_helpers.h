@@ -31,20 +31,15 @@ void mutex_lock(struct mutex *mutex) {
   /*   assert(0); */
   /* } */
   mutex->locked = true;
-  lock_count++;
-  list_add(&locks, &mutex->node);
+  /* lock_count++; */
+  /* list_add(&locks, &mutex->node); */
 }
 
 void mutex_unlock(struct mutex *mutex) {
   /* assert(mutex->locked == true); */
   mutex->locked = false;
-  lock_count--;
-  list_del(&mutex->node);
-}
-
-void check_locks() {
-  if (list_empty(&locks))
-    assert(0);
+  /* lock_count--; */
+  /* list_del(&mutex->node); */
 }
 
 void sema_init(void *sem, int count);

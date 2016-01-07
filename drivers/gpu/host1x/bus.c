@@ -16,6 +16,7 @@
  */
 
 #include "verify_helpers_empty.h"
+#include "datarace.h"
 #include "bus.h"
 #include "dev.h"
 #include "host1x.h"
@@ -479,9 +480,9 @@ int host1x_register(struct host1x *host1x)
 {
 	struct host1x_driver *driver;
 
-	mutex_lock(&host1x->devices_lock);
-	list_add_tail(&host1x->list, &host1x->devices);
-	mutex_unlock(&host1x->devices_lock);
+	mutex_lock(&devices_lock);
+	list_add_tail(&host1x->list, get_device_list(&devices_lock, &devices));
+	mutex_unlock(&devices_lock);
 
 	mutex_lock(&drivers_lock);
 
@@ -524,7 +525,7 @@ int host1x_driver_register_full(struct host1x_driver *driver,
 
 	mutex_lock(&devices_lock);
 
-	list_for_each_entry(host1x, &devices, list)
+	list_for_each_entry(host1x, get_device_list(&devices_lock, &devices), list)
 		host1x_attach_driver(host1x, driver);
 
 	mutex_unlock(&devices_lock);
@@ -551,7 +552,7 @@ int host1x_client_register(struct host1x_client *client)
 
 	mutex_lock(&devices_lock);
 
- 	list_for_each_entry(host1x, &devices, list) {
+ 	list_for_each_entry(host1x, get_device_list(&devices_lock, &devices), list) {
 		err = host1x_add_client(host1x, client);
 		if (!err) {
 			mutex_unlock(&devices_lock);
@@ -577,7 +578,7 @@ int host1x_client_unregister(struct host1x_client *client)
 
 	mutex_lock(&devices_lock);
 
-	list_for_each_entry(host1x, &devices, list) {
+	list_for_each_entry(host1x, get_device_list(&devices_lock, &devices), list) {
 		err = host1x_del_client(host1x, client);
 		if (!err) {
 			mutex_unlock(&devices_lock);

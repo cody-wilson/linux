@@ -39,7 +39,8 @@ int main() {
     /* host1x_syncpt_init(host); */
 
     host1x_intr_init(host, syncpt_irq);
-    check_locks();
-    
-    
+    check_locks(); 
+
+    err = host1x_register(host);
+		return 0;
 }
